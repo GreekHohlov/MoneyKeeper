@@ -6,17 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "uniqueLogin", columnNames = "login"),
-        @UniqueConstraint(name = "uniqueEmail", columnNames = "email")})
+@Table(name = "users",
+        uniqueConstraints = {@UniqueConstraint(name = "uniqueLogin", columnNames = "login"),
+                @UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
+                @UniqueConstraint(name = "uniquePhone", columnNames = "phone")})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-public class Users extends GenericModel{
+public class Users extends GenericModel {
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "middle_name")
@@ -37,4 +40,10 @@ public class Users extends GenericModel{
     private Set<Expenses> expansesName;
     @OneToMany(mappedBy = "users")
     private Set<Files> files;
+    @OneToMany(mappedBy = "users")
+    private Set<Earnings> earnings;
+    @Column(name = "deleted_when")
+    private LocalDateTime deletedWhen;
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
+    private boolean isDeleted;
 }
